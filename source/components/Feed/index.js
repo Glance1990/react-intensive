@@ -8,11 +8,17 @@ import Composer from 'components/Composer';
 import Post from 'components/Post';
 
 export default class Feed extends Component {
+
+
     render () {
+        const options = this.props;
+        console.log(this.props);
+
+
         return (
             <section className = { Styles.feed } >
-                <Composer />
-                <Post />
+                <Composer {...options} />
+                <Post {...options} />
             </section>
         );
     }
