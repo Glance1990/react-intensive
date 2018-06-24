@@ -5,8 +5,8 @@ import { hot } from 'react-hot-loader';
 import avatar from 'theme/assets/homer.png';
 
 // Components
-import Composer from 'components/Composer';
 import Feed from 'components/Feed';
+import { Provider } from 'components/HOC/withProfile';
 
 const options = {
     avatar,
@@ -19,9 +19,9 @@ const options = {
 export class App extends Component {
     render () {
         return (
-            <section>
-                <Feed {...options} />
-            </section>
+            <Provider value = { options }>
+                <Feed { ...options } />
+            </Provider>
         );
     }
 }
