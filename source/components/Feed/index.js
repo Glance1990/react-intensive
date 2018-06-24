@@ -11,14 +11,14 @@ export default class Feed extends Component {
 
 
     render () {
-        const options = this.props;
-        console.log(this.props);
-
+        const {avatar, currentUserFirstName} = this.props;
 
         return (
             <section className = { Styles.feed } >
-                <Composer {...options} />
-                <Post {...options} />
+                <Composer
+                    avatar = { avatar }
+                    currentUserFirstName = { currentUserFirstName }/>
+                <Post {...this.props} />
             </section>
         );
     }

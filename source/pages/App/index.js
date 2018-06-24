@@ -20,7 +20,7 @@ export class App extends Component {
     render () {
         return (
             <section>
-                <Feed {...options } />
+                <Feed {...options} />
             </section>
         );
     }
