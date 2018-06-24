@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
+import { hot } from 'react-hot-loader';
 
 // Components
 import Composer from 'components/Composer';
-import Post from 'components/Post';
+import Feed from 'components/Feed';
+
+@hot(module)
 
 export class App extends Component {
     render () {
         return (
             <section>
-                <Composer />
-				<Post />
+                <Feed />
             </section>
         );
     }
