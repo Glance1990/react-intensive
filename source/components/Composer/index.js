@@ -6,6 +6,7 @@ import Styles from './styles.m.css';
 
 // Components
 import { withProfile } from "../HOC/withProfile";
+import Counter from 'components/Counter'
 
 
 export class Composer extends Component {

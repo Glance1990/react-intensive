@@ -9,13 +9,16 @@ import { getUniqueID } from 'instruments';
 import Composer from 'components/Composer';
 import Post from 'components/Post';
 import StatusBar from "../StatusBar";
+import Catcher from 'components/Catcher';
+import Counter from 'components/Counter';
+
 
 export default class Feed extends Component {
-    static propTypes = {
-        avatar:               string.isRequired,
-        currentUserFirstName: string.isRequired,
-        currentUserLastName:  string.isRequired,
-    };
+    // static propTypes = {
+    //     avatar:               string.isRequired,
+    //     currentUserFirstName: string.isRequired,
+    //     currentUserLastName:  string.isRequired,
+    // };
 
     static defaultProps = {
         currentUserFirstName: 'Jon',
@@ -50,7 +53,9 @@ export default class Feed extends Component {
         const { posts: userPosts } = this.state;
 
         const posts = userPosts.map((post, index) => (
-            <Post key = {post._id} {...post}/>
+            <Catcher key = {post._id}>
+                <Post {...post}/>
+            </Catcher>
         ))
 
         return (
@@ -61,6 +66,7 @@ export default class Feed extends Component {
                     avatar = { avatar }
                     currentUserFirstName = { currentUserFirstName }
                 />
+                <Counter count = { posts.length } />
                 { posts }
             </section>
         );

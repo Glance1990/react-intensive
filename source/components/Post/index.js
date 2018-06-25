@@ -7,20 +7,17 @@ import string from 'prop-types';
 import Styles from './styles.m.css';
 
 // Components
-import { withProfile } from "../HOC/withProfile";
+import { withProfile } from '../HOC/withProfile';
+
+
 
 export class Post extends Component {
-    static propTypes = {
-        avatar:               string.isRequired,
-        comment:              string.isRequired,
-        currentUserFirstName: string.isRequired,
-        currentUserLastName:  string.isRequired,
-    };
-
-    // Example should component update
-    shouldComponentUpdate(nextProps, nextState) {
-       return JSON.stringify(this.props) !== JSON.stringify(nextProps);
-    }
+    // static propTypes = {
+    //     avatar:               string.isRequired,
+    //     comment:              string.isRequired,
+    //     currentUserFirstName: string.isRequired,
+    //     currentUserLastName:  string.isRequired,
+    // };
 
     render () {
         const {
