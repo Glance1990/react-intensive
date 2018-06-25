@@ -7,30 +7,35 @@ import string from 'prop-types';
 import Styles from './styles.m.css';
 
 // Components
-import { Consumer } from "../HOC/withProfile";
+import { withProfile } from "../HOC/withProfile";
 
-export default class Post extends Component {
+export class Post extends Component {
     static propTypes = {
         avatar:               string.isRequired,
+        comment:              string.isRequired,
         currentUserFirstName: string.isRequired,
         currentUserLastName:  string.isRequired,
     };
 
+
     render () {
+        const {
+            avatar,
+            comment,
+            currentUserFirstName,
+            currentUserLastName,
+        } = this.props;
+
         return (
-            <Consumer>
-                {
-                    (context) => (
-                        <section className = { Styles.post }>
-                            <span className = { Styles.cross } />
-                            <img src = { context.avatar } />
-                            <a href = '#'>{`${context.currentUserFirstName} ${context.currentUserLastName}`}</a>
-                            <time>{moment().format('MMMMM D h:mm:ss a')}</time>
-                            <p>{ this.props.comment }</p>
-                        </section>
-                    )
-                }
-            </Consumer>
+                <section className = { Styles.post }>
+                    <span className = { Styles.cross } />
+                    <img src = { avatar } />
+                    <a href = '#'>{`${currentUserFirstName} ${currentUserLastName}`}</a>
+                    <time>{moment().format('MMMMM D h:mm:ss a')}</time>
+                    <p>{ this.props.comment }</p>
+                </section>
         );
     }
 }
+
+export default withProfile(Post);
