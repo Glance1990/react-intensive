@@ -17,6 +17,10 @@ export class Post extends Component {
         currentUserLastName:  string.isRequired,
     };
 
+    // Example should component update
+    shouldComponentUpdate(nextProps, nextState) {
+       return JSON.stringify(this.props) !== JSON.stringify(nextProps);
+    }
 
     render () {
         const {
@@ -25,6 +29,7 @@ export class Post extends Component {
             currentUserFirstName,
             currentUserLastName,
         } = this.props;
+
 
         return (
                 <section className = { Styles.post }>

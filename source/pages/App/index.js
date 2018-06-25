@@ -1,4 +1,4 @@
-import React, { Component, StrictMode } from 'react';
+import React, { Component } from 'react';
 import { hot } from 'react-hot-loader';
 
 // Instruments
@@ -19,11 +19,9 @@ const options = {
 export class App extends Component {
     render () {
         return (
-            <StrictMode>
-                <Provider value = { options }>
-                    <Feed { ...options } />
-                </Provider>
-            </StrictMode>
+            <Provider value = { options }>
+                <Feed { ...options } />
+            </Provider>
         );
     }
 }
