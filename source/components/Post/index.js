@@ -1,4 +1,4 @@
-// Core
+ // Core
 import React, { Component } from 'react';
 import moment from 'moment';
 import string from 'prop-types';
@@ -26,7 +26,7 @@ export default class Post extends Component {
                             <img src = { context.avatar } />
                             <a href = '#'>{`${context.currentUserFirstName} ${context.currentUserLastName}`}</a>
                             <time>{moment().format('MMMMM D h:mm:ss a')}</time>
-                            <p>Hi lectrum</p>
+                            <p>{ this.props.comment }</p>
                         </section>
                     )
                 }
