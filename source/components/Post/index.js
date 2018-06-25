@@ -18,22 +18,35 @@ export class Post extends Component {
     //     currentUserFirstName: string.isRequired,
     //     currentUserLastName:  string.isRequired,
     // };
+    _getCross = () => {
+        const {
+            currentUserFirstName,
+            currentUserLastName,
+            firstName,
+            lastName,
+        } = this.props;
 
+        return `${firstName} ${lastName}` === `${currentUserFirstName} ${currentUserLastName}`
+        ? <span className = { Styles.cross } />
+        : null;
+    }
     render () {
         const {
             avatar,
             comment,
-            currentUserFirstName,
-            currentUserLastName,
+            created,
+            firstName,
+            lastName,
         } = this.props;
 
+        const cross = this._getCross();
 
         return (
                 <section className = { Styles.post }>
-                    <span className = { Styles.cross } />
+                    { cross }
                     <img src = { avatar } />
-                    <a href = '#'>{`${currentUserFirstName} ${currentUserLastName}`}</a>
-                    <time>{moment().format('MMMMM D h:mm:ss a')}</time>
+                    <a href = '#'>{`${firstName} ${lastName}`}</a>
+                    <time>{moment.unix(created).format('MMMMM D h:mm:ss a')}</time>
                     <p>{ this.props.comment }</p>
                 </section>
         );

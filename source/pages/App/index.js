@@ -11,8 +11,8 @@ import Catcher from 'components/Catcher';
 
 const options = {
     avatar,
-    currentUserFirstName: 'Paul',
-    currentUserLastName:  'Kadysh',
+    currentUserFirstName: 'Павел',
+    currentUserLastName:  'Кадыш',
 };
 
 
