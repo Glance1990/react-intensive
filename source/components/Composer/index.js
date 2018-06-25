@@ -18,11 +18,25 @@ export class Composer extends Component {
     _handleFormSubmit = (e) => {
         e.preventDefault();
         this._submitComment();
+
+    }
+
+    _submitCommentEnter = (e) => {
+        const enterKey = e.key === 'Enter';
+        if (enterKey) {
+            e.preventDefault();
+            this._submitComment();
+        }
     }
 
     _updateComment = (e) => {
         const { value: comment } = e.target;
         this.setState({ comment });
+    }
+
+    _preventCopy = (e) => {
+        e.preventDefault();
+        alert('Stopy copyyng the text');
     }
 
     _submitComment = () => {
@@ -53,6 +67,8 @@ export class Composer extends Component {
                             placeholder = { `What is in your mind, ${currentUserFirstName}` }
                             value = { comment }
                             onChange = { this._updateComment }
+                            onCopy = {this._preventCopy}
+                            onKeyDown = { this._submitCommentEnter }
                         />
                         <input type = 'submit' value = 'Post' />
                     </form>
