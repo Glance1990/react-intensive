@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { string } from 'prop-types';
 import gsap from 'gsap';
-import { Transition } from 'react-transition-group';
+import { Transition, CSSTransition, TransitionGroup } from 'react-transition-group';
 
 // Instruments
 import Styles from './styles.m.css';
@@ -15,6 +15,7 @@ import Post from 'components/Post';
 import StatusBar from "../StatusBar";
 import Catcher from 'components/Catcher';
 import Counter from 'components/Counter';
+import Postman from 'components/Postman';
 
 import Spinner from 'components/Spinner';
 
@@ -35,6 +36,7 @@ export default class Feed extends Component {
         posts: [],
         isSpinning: false,
         online: false,
+        isAppear: true,
     };
 
     componentDidMount () {
@@ -177,19 +179,45 @@ export default class Feed extends Component {
     _animateComposerAppear = (composer) => {
         gsap.fromTo(composer, 2, {opacity: 0, y: -150, x: -150}, {opacity: 1, y: 0, x: 0})
     }
+    _animatePostmanAppearEnter = (postman) => {
+        gsap.fromTo(postman, 2, {opacity: 0, x: 450}, {opacity: 1, x: 0,
+            onComplete: () => {
+                setTimeout(() => {
+                    this.setState({
+                        isAppear: false
+                    })
+                }, 5000)
+            }});
+    }
+    _animatePostmanAppearExit = (postman) => {
+        console.log(postman);
+        //gsap.fromTo(postman, 3, {opacity: 0, x: 450}, {opacity: 1, y: 0, x: 0});
+        gsap.fromTo(postman, 5, {x: 0}, {x: 450});
+
+    }
 
     render () {
-        const { posts: userPosts, isSpinning, online } = this.state;
+        const { posts: userPosts, isSpinning, online, isAppear } = this.state;
         const { avatar, currentUserFirstName } = this.props;
 
         const posts = userPosts.map((post, index) => (
-            <Catcher key = {post.id}>
-                <Post
-                    {...post}
-                    _likePostAsync = { this._likePostAsync }
-                    _removePostAsync = { this._removePostAsync }
-                />
-            </Catcher>
+            <CSSTransition
+                classNames = { {
+                    enter: Styles.postInStart,
+                    enterActive: Styles.postInEnd,
+                    exit: Styles.postOutStart,
+                    exitActive: Styles.postOutEnd,
+                } }
+                key = {post.id}
+                timeout = { {enter: 500, exit: 400} }>
+                <Catcher>
+                    <Post
+                        {...post}
+                        _likePostAsync = { this._likePostAsync }
+                        _removePostAsync = { this._removePostAsync }
+                    />
+                </Catcher>
+            </CSSTransition>
         ))
 
         return (
@@ -200,7 +228,8 @@ export default class Feed extends Component {
                     appear
                     in
                     timeout={ 2000 }
-                    onEnter={this._animateComposerAppear }>
+                    onEnter={this._animateComposerAppear }
+                    >
                     <Composer
                         _createPostAsync = { this._createPostAsync }
                         avatar = { avatar }
@@ -208,7 +237,18 @@ export default class Feed extends Component {
                     />
                 </Transition>
                 <Counter count = { posts.length } />
-                { posts }
+                <TransitionGroup>
+                    { posts }
+                </TransitionGroup>
+                <Transition
+                    appear
+                    in = { isAppear }
+                    timeout = { 5000 }
+                    onEnter = {this._animatePostmanAppearEnter }
+                    onExit = {this._animatePostmanAppearExit }
+                    >
+                    <Postman />
+                </Transition>
             </section>
         );
     }

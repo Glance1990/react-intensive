@@ -62,7 +62,7 @@ export class Post extends Component {
                     <img src = { avatar } />
                     <a href = '#'>{`${firstName} ${lastName}`}</a>
                     <time>{moment.unix(created).format('MMMMM D h:mm:ss a')}</time>
-                    <p>{ this.props.comment }</p>
+                    <pre>{ this.props.comment }</pre>
                     <Like
                         _likePostAsync = { _likePostAsync }
                         id = { id }
