@@ -70,6 +70,33 @@ export default class Feed extends Component {
             }
             console.log(createdPost, meta);
         })
+
+        socket.on('like', (postJSON) => {
+            const { data: likedPost, meta } = JSON.parse(postJSON);
+
+            if (`${currentUserFirstName} ${currentUserLastName}`
+                !==
+                `${meta.authorFirstName} ${meta.authorLastName}`
+
+            ) {
+                this.setState(({ posts }) => ({
+                    posts: posts.map((post) => post.id === likedPost.id ? likedPost : post),
+                }));
+            }
+        })
+        socket.on('remove', (postJSON) => {
+            const { data: removePost, meta } = JSON.parse(postJSON);
+
+            if (`${currentUserFirstName} ${currentUserLastName}`
+                !==
+                `${meta.authorFirstName} ${meta.authorLastName}`
+
+            ) {
+                this.setState(({ posts }) => ({
+                    posts: posts.filter((post) => post.id !== removePost.id),
+                }));
+            }
+        })
     }
 
     _setPostsFetchingState = (state) => {
@@ -131,6 +158,21 @@ export default class Feed extends Component {
             this._setPostsFetchingState(false);
         }
     }
+    _removePostAsync = async (id) => {
+        try {
+            this._setPostsFetchingState(true);
+
+            const likedPost = await api.removePost(id);
+
+            this.setState(({ posts }) => ({
+                posts: posts.filter((post) => post.id !== id ),
+            }));
+        } catch ({ message }) {
+            console.error(message);
+        } finally {
+            this._setPostsFetchingState(false);
+        }
+    }
 
     _animateComposerAppear = (composer) => {
         gsap.fromTo(composer, 2, {opacity: 0, y: -150, x: -150}, {opacity: 1, y: 0, x: 0})
@@ -145,6 +187,7 @@ export default class Feed extends Component {
                 <Post
                     {...post}
                     _likePostAsync = { this._likePostAsync }
+                    _removePostAsync = { this._removePostAsync }
                 />
             </Catcher>
         ))

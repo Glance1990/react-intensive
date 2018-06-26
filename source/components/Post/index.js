@@ -21,6 +21,15 @@ export class Post extends Component {
     //     currentUserLastName:  string.isRequired,
     //     _likePostAsync:  func.isRequired,
     // };
+
+    _removePost = () => {
+        const {
+            _removePostAsync,
+            id
+        } = this.props;
+
+        _removePostAsync(id);
+    }
     _getCross = () => {
         const {
             currentUserFirstName,
@@ -30,7 +39,7 @@ export class Post extends Component {
         } = this.props;
 
         return `${firstName} ${lastName}` === `${currentUserFirstName} ${currentUserLastName}`
-        ? <span className = { Styles.cross } />
+        ? <span className = { Styles.cross } onClick={ this._removePost } />
         : null;
     }
     render () {

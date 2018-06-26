@@ -91,7 +91,6 @@ class Like extends Component {
         } else if (likedByMe) {
             result = `You and ${likes.length - 1} others`;
         }
-
         return result;
     }
 
