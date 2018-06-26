@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import cx from 'classnames';
 import { string  } from 'prop-types';
+import { bool } from 'prop-types';
 
 // Instruments
 import Styles from './style.m.css';
@@ -14,18 +15,23 @@ export class StatusBar extends Component {
         avatar: string.isRequired,
         currentUserFirstName: string.isRequired,
         currentUserLastName: string.isRequired,
+        online: bool.isRequired,
     }
 
     render () {
+        const { online, avatar,  currentUserFirstName, currentUserLastName } = this.props;
         const status = cx({
             [Styles.status]: true,
-            [Styles.offline]: true,
+            [Styles.offline]: !online,
+            [Styles.online]: online,
         });
-        const { avatar,  currentUserFirstName, currentUserLastName } = this.props;
+
+        const statusString = online ? 'Online' : 'Offline';
+
         return (
                 <section className = { Styles.statusBar }>
                     <div className = { status }>
-                        <div>Offline</div>
+                        <div>{ statusString }</div>
                         <span />
                     </div>
                     <button>
