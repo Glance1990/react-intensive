@@ -114,14 +114,32 @@ export default class Feed extends Component {
 
     }
 
+    _likePostAsync = async (id) => {
+        try {
+            this._setPostsFetchingState(true);
+
+            const likedPost = await api.likePost(id);
+
+            this.setState(({ posts }) => ({
+                posts: posts.map((post) => post.id === id ? likedPost : post),
+            }));
+        } catch ({ message }) {
+            console.error(message);
+        } finally {
+            this._setPostsFetchingState(false);
+        }
+    }
+
     render () {
-        console.log('render');
-        const { avatar, currentUserFirstName } = this.props;
         const { posts: userPosts, isSpinning, online } = this.state;
+        const { avatar, currentUserFirstName } = this.props;
 
         const posts = userPosts.map((post, index) => (
             <Catcher key = {post.id}>
-                <Post {...post}/>
+                <Post
+                    {...post}
+                    _likePostAsync = { this._likePostAsync }
+                />
             </Catcher>
         ))
 

@@ -32,4 +32,20 @@ export const api = {
 
         return post;
     },
+    async likePost (id) {
+        const response = await fetch(`${MAIN_URL}/${id}`, {
+            method: 'PUT',
+            headers: {
+                Authorization: TOKEN,
+            },
+        });
+
+        if (response.status !== 200) {
+            throw new Error('Posts were not liked');
+        }
+
+        const { data: post } = await response.json();
+
+        return post;
+    },
 }

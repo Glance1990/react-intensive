@@ -2,12 +2,14 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 import string from 'prop-types';
+import func from 'prop-types';
 
 // Instruments
 import Styles from './styles.m.css';
 
 // Components
 import { withProfile } from '../HOC/withProfile';
+import Like from 'components/Like';
 
 
 
@@ -17,6 +19,7 @@ export class Post extends Component {
     //     comment:              string.isRequired,
     //     currentUserFirstName: string.isRequired,
     //     currentUserLastName:  string.isRequired,
+    //     _likePostAsync:  func.isRequired,
     // };
     _getCross = () => {
         const {
@@ -32,11 +35,14 @@ export class Post extends Component {
     }
     render () {
         const {
+            _likePostAsync,
             avatar,
             comment,
             created,
             firstName,
             lastName,
+            id,
+            likes,
         } = this.props;
 
         const cross = this._getCross();
@@ -48,6 +54,11 @@ export class Post extends Component {
                     <a href = '#'>{`${firstName} ${lastName}`}</a>
                     <time>{moment.unix(created).format('MMMMM D h:mm:ss a')}</time>
                     <p>{ this.props.comment }</p>
+                    <Like
+                        _likePostAsync = { _likePostAsync }
+                        id = { id }
+                        likes = { likes }
+                    />
                 </section>
         );
     }
