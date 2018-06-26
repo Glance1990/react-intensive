@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { string } from 'prop-types';
+import gsap from 'gsap';
+import { Transition } from 'react-transition-group';
 
 // Instruments
 import Styles from './styles.m.css';
@@ -130,6 +132,10 @@ export default class Feed extends Component {
         }
     }
 
+    _animateComposerAppear = (composer) => {
+        gsap.fromTo(composer, 2, {opacity: 0, y: -150, x: -150}, {opacity: 1, y: 0, x: 0})
+    }
+
     render () {
         const { posts: userPosts, isSpinning, online } = this.state;
         const { avatar, currentUserFirstName } = this.props;
@@ -147,11 +153,17 @@ export default class Feed extends Component {
             <section className = { Styles.feed } >
                 <Spinner isSpinning = { isSpinning } />
                 <StatusBar online = { online } />
-                <Composer
-                    _createPostAsync = { this._createPostAsync }
-                    avatar = { avatar }
-                    currentUserFirstName = { currentUserFirstName }
-                />
+                <Transition
+                    appear
+                    in
+                    timeout={ 2000 }
+                    onEnter={this._animateComposerAppear }>
+                    <Composer
+                        _createPostAsync = { this._createPostAsync }
+                        avatar = { avatar }
+                        currentUserFirstName = { currentUserFirstName }
+                    />
+                </Transition>
                 <Counter count = { posts.length } />
                 { posts }
             </section>
