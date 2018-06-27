@@ -1,15 +1,14 @@
 // Core
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from "react";
+import ReactDOM from "react-dom";
 
 // Theme
-import './theme/init';
+import "./theme/init";
 
 // Components
-import { App } from './pages/App';
+import { App } from "./pages/App";
 
-
-ReactDOM.render(<App />, document.getElementById('app'));
+ReactDOM.render(<App />, document.getElementById("app"));
 
 // const element1 = <h1 title = 'A title'>Hello lectrum</h1>;
 

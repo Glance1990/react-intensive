@@ -1,13 +1,13 @@
-import { TOKEN, MAIN_URL } from './config';
+import { TOKEN, MAIN_URL } from "./config";
 
 export const api = {
     async fetchPosts () {
         const response = await fetch(`${MAIN_URL}?size=20`, {
-            method: 'GET',
+            method: "GET",
         });
 
         if (response.status !== 200) {
-            throw new Error('Posts were not loaded');
+            throw new Error("Posts were not loaded");
         }
 
         const { data: posts } = await response.json();
@@ -16,16 +16,16 @@ export const api = {
     },
     async createPost (comment) {
         const response = await fetch(MAIN_URL, {
-            method: 'POST',
+            method:  "POST",
             headers: {
-                'Content-Type': 'application/json',
-                Authorization: TOKEN,
+                "Content-Type": "application/json",
+                Authorization:  TOKEN,
             },
-            body: JSON.stringify({ comment })
+            body: JSON.stringify({ comment }),
         });
 
         if (response.status !== 200) {
-            throw new Error('Posts were not created');
+            throw new Error("Posts were not created");
         }
 
         const { data: post } = await response.json();
@@ -34,14 +34,14 @@ export const api = {
     },
     async likePost (id) {
         const response = await fetch(`${MAIN_URL}/${id}`, {
-            method: 'PUT',
+            method:  "PUT",
             headers: {
                 Authorization: TOKEN,
             },
         });
 
         if (response.status !== 200) {
-            throw new Error('Posts were not liked');
+            throw new Error("Posts were not liked");
         }
 
         const { data: post } = await response.json();
@@ -50,14 +50,14 @@ export const api = {
     },
     async removePost (id) {
         const response = await fetch(`${MAIN_URL}/${id}`, {
-            method: 'DELETE',
+            method:  "DELETE",
             headers: {
                 Authorization: TOKEN,
             },
         });
 
         if (response.status !== 204) {
-            throw new Error('Posts were not deleted');
+            throw new Error("Posts were not deleted");
         }
     },
-}
+};

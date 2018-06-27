@@ -1,23 +1,23 @@
 //Core
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
 //Instruments
-import Styles from './style.m.css';
-import { object } from 'prop-types';
+import Styles from "./style.m.css";
+import { object } from "prop-types";
 
 export default class Catcher extends Component {
     static propTypes = {
-        children: object.isRequired
-    }
+        children: object.isRequired,
+    };
 
     state = {
         error: false,
-    }
+    };
 
     componentDidCatch (error, stack) {
         this.setState({
             error: true,
-        })
+        });
     }
 
     render () {
