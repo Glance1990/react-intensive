@@ -1,5 +1,3 @@
-@import '../../theme/palette';
-
 .counter {
     display: flex;
     justify-content: center;

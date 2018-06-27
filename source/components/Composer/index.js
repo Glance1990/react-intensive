@@ -8,6 +8,7 @@ import Styles from "./styles.m.css";
 import { withProfile } from "../HOC/withProfile";
 
 export class Composer extends Component {
+
     state = {
         comment: "",
     };
@@ -58,7 +59,7 @@ export class Composer extends Component {
 
 
         return (
-            <section className = { Styles.composer }>
+            <section className = {Styles.composer}>
                 <img src = { avatar } />
                 <form onSubmit = { this._handleFormSubmit }>
                     <textarea
@@ -74,5 +75,6 @@ export class Composer extends Component {
         );
     }
 }
+
 
 export default withProfile(Composer);
