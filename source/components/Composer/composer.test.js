@@ -112,7 +112,96 @@ describe('Composer component', () => {
                     testComment,
                 );
                 expect(result.state()).toEqual(initialState);
+            });
+        });
+
+        describe('_updateComment', () => {
+            test('should update a state.comment value when called as onChange event handler', () => {
+                result.instance()._updateComment({
+                    target: {
+                        value: testComment,
+                    }
+                });
+
+                expect(result.state()).toEqual(updatedState);
+                jest.clearAllMocks();
+                result.setState(initialState);
+            });
+        });
+
+        describe('_submitCommentOnEnter', () => {
+            afterEach(() => {
+                jest.clearAllMocks();
+            });
+
+            test('should call e.preventDefault() and this._submitComment when invoked onKeyPress handler', () => {
+                result.instance()._submitCommentEnter({
+                    preventDefault: mocks.preventDefaultMock,
+                    key: 'Enter',
+                });
+
+                expect(mocks.preventDefaultMock).toHaveBeenCalledTimes(1);
+                expect(spies._submitCommentSpy).toHaveBeenCalledTimes(1);
+
+            });
+
+            test('should not call e.preventDefault and this._submitComment any other key is pressed', () => {
+                result.instance()._submitCommentEnter({
+                    preventDefault: mocks.preventDefaultMock,
+                });
+
+                expect(mocks.preventDefaultMock).not.toHaveBeenCalled();
+                expect(spies._submitCommentSpy).not.toHaveBeenCalled();
+            });
+        });
+
+        describe('shold implement core business logic of sending a text content to create post handdler', () => {
+           test('textarea value should be empty initially', () => {
+               expect(result.find('textarea').text()).toBe('');
+           });
+           test('textarea value should be controlled by component state', () => {
+               expect(result.state('comment')).toBe('');
+               expect(result.find('textarea').text()).toBe('');
+
+               result.setState({
+                   comment: testComment,
+               });
+
+               expect(result.find('textarea').text()).toBe(testComment);
+               result.setState(initialState);
+           });
+           test('textarea onChange event should trigger this._updateComment handler', () => {
+               result.find('textarea').simulate('change', {
+                   target: {
+                       value: testComment,
+                   },
+               });
+
+               expect(spies._updateCommentSpy).toHaveBeenCalledTimes(1);
+               expect(result.find('textarea').text()).toBe(testComment);
+               expect(result.state()).toEqual(updatedState);
+
+           })
+
+        });
+
+        describe('should render valid markup depending on passed props', () => {
+            test('should contain valid CSS class', () => {
+                expect(markup.attr('class')).toBe('composer');
+            });
+
+            test('textarea should contain calid value for placehoolder attribute', () => {
+                expect(markup.find('textarea').attr('placeholder'))
+                    .toBe(`What is in your mind, ${currentUserFirstName}`);
+            });
+
+            test('img tag should contin valid value for src attribute', () => {
+                expect(markup.find('img').attr('src')).toBe(avatar);
+            });
+
+            test('snapshot should match', () => {
+                expect(markup.html()).toMatchSnapshot();
             })
         })
-    })
+    });
 });
