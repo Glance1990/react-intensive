@@ -13,16 +13,23 @@ import { api } from "../../REST/api";
 import { GROUP_ID } from "../../REST/config";
 import { socket } from "../../socket/init";
 
-// Compoonents
+//actions
+import dispatcher from 'flux/dispatcher';
+import postsStore from 'flux/store';
+import { fetchPosts } from 'flux/actions/posts';
+import { startSpinning, stopSpinning } from 'flux/actions/ui';
+
+// Components
 import Composer from "components/Composer";
 import Post from "components/Post";
 import StatusBar from "../StatusBar";
 import Catcher from "components/Catcher";
 import Counter from "components/Counter";
 import Postman from "components/Postman";
-
 import Spinner from "components/Spinner";
+import { withStore } from 'components/HOC';
 
+@withStore
 export default class Feed extends Component {
     // static propTypes = {
     //     avatar:               string.isRequired,
@@ -35,14 +42,16 @@ export default class Feed extends Component {
     };
 
     state = {
-        posts:      [],
-        isSpinning: false,
+        posts:      postsStore.getPosts(),
+        isSpinning: postsStore.getSpinningStatus(),
         online:     false,
         isAppear:   true,
     };
 
     componentDidMount () {
         const { currentUserFirstName, currentUserLastName } = this.props;
+
+        postsStore.subscribe(this._onChange);
 
         this._fetchPostAsync();
 
@@ -58,7 +67,7 @@ export default class Feed extends Component {
             });
         });
 
-        socket.emit("join", GROUP_ID);
+        // socket.emit("join", GROUP_ID);
 
         // event on creating posts
         socket.on("create", (postJSON) => {
@@ -103,21 +112,43 @@ export default class Feed extends Component {
         });
     }
 
-    _setPostsFetchingState = (state) => {
+    componentWillUnmount () {
+        postsStore.unsubscribe(this._onChange);
+    }
+
+    _onChange = () => {
+        console.log('Feed store onChange');
+        const { isSpinning } = postsStore.getStore();
+
+
         this.setState({
-            isSpinning: state,
+            isSpinning,
         });
+    };
+
+    _setPostsFetchingState = (isSpinning) => {
+        const spinner =
+            isSpinning
+                ? startSpinning()
+                : stopSpinning();
+
+        dispatcher.dispatch(spinner);
+        // this.setState({
+        //     isSpinning: state,
+        // });
     };
 
     _fetchPostAsync = async () => {
         try {
+
             this._setPostsFetchingState(true);
             const posts = await api.fetchPosts();
 
-            this.setState({
-                posts,
-                isSpinning: false,
-            });
+            // this.setState({
+            //     posts,
+            //     isSpinning: false,
+            // });
+            dispatcher.dispatch(fetchPosts(posts));
         } catch ({ message }) {
             console.error(message);
         } finally {
@@ -209,7 +240,11 @@ export default class Feed extends Component {
     };
 
     render () {
-        const { posts: userPosts, isSpinning, online, isAppear } = this.state;
+        const { isSpinning, online, isAppear } = this.state;
+        console.log(this.props);
+        const { posts: userPosts } = this.props;
+
+
         const { avatar, currentUserFirstName } = this.props;
 
         const posts = userPosts.map((post, index) => (
